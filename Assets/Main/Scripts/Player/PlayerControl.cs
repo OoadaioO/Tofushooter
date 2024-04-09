@@ -7,8 +7,11 @@ public class PlayerControl : MonoBehaviour {
 
     private Player player;
 
-    private Vector2 moveDirection;
-    private Vector2 weaponDirection = Vector2.right;
+    private Vector2 moveDirection = Vector3.down;
+    private Vector2 weaponAimVector = Vector3.right;
+
+    private bool isMoving = false;
+    private bool isFirePreviousFrame;
 
     private void Awake() {
         player = GetComponent<Player>();
@@ -18,7 +21,7 @@ public class PlayerControl : MonoBehaviour {
     private void Update() {
         GatherInput();
         MovementInput();
-        AimWeaponInput();
+        WeaponInput();
     }
 
 
@@ -30,39 +33,44 @@ public class PlayerControl : MonoBehaviour {
 
         moveDirection = new Vector2(horizontal, vertical).normalized;
 
-
-
     }
 
     private void MovementInput() {
 
-        if (moveDirection != Vector2.zero) {
+        isMoving = moveDirection != Vector2.zero;
+
+
+        if (isMoving) {
             player.movementByVelocityEvent.CallMovementByVelocityEvent(moveDirection, moveSpeed);
         } else {
             player.idleEvent.CallIdleEvent();
         }
     }
 
-    private void AimWeaponInput() {
+    private void WeaponInput() {
 
-        if (moveDirection == Vector2.zero) return;
+        AimWeaponInput(out Vector3 weaponDirection, out float weaponAngleDegrees, out float playerAngleDegrees, out AimDirection playerAimDirection);
+        FireWeaponInput(weaponDirection, weaponAngleDegrees, playerAngleDegrees, playerAimDirection);
+    }
+
+    private void AimWeaponInput(out Vector3 weaponDirection, out float weaponAngleDegrees, out float playerAngleDegrees, out AimDirection playerAimDirection) {
+
+        float angle = Vector3.SignedAngle(this.weaponAimVector, moveDirection, Vector3.forward);
+        this.weaponAimVector = Quaternion.AngleAxis(angle * Time.deltaTime * rotateSpeed, Vector3.forward) * (Vector3)this.weaponAimVector; ;
+
+        weaponDirection = this.weaponAimVector;
+        weaponAngleDegrees = HelperUtilities.GetAngleFromVector(weaponDirection);
+        playerAngleDegrees = weaponAngleDegrees;
+        playerAimDirection = HelperUtilities.GetAimDirection8(weaponAngleDegrees);
+
+        player.aimWeaponEvent.CallAimWeaponEvent(playerAimDirection, playerAngleDegrees, weaponAngleDegrees, weaponDirection);
+
+    }
+
+    private void FireWeaponInput(Vector3 weaponDirection, float weaponAngleDegrees, float playerAngleDegrees, AimDirection playerAimDirection) {
 
 
-        float angle = Vector3.SignedAngle(weaponDirection, moveDirection,Vector3.forward);
-        Vector3 newDirection = Quaternion.AngleAxis(angle * Time.deltaTime * rotateSpeed, Vector3.forward) * (Vector3)weaponDirection;
-        weaponDirection = newDirection;
-
-
-        float weaponAngleDegrees = HelperUtilities.GetAngleFromVector(weaponDirection);
-        AimDirection weaponAimDirection = HelperUtilities.GetAimDirection8(weaponAngleDegrees);
-
-
-        Vector2 playerDirection = moveDirection;
-        float playerAngleDegrees = HelperUtilities.GetAngleFromVector(playerDirection);
-        AimDirection playerAimDirection = HelperUtilities.GetAimDirection8(playerAngleDegrees);
-
-
-        player.aimWeaponEvent.CallAimWeaponEvent(playerAimDirection, playerAngleDegrees, weaponAimDirection, weaponAngleDegrees, weaponDirection, true);
+        player.fireWeaponEvent.CallFireWeaponEvent(true, isFirePreviousFrame, playerAimDirection, playerAngleDegrees, weaponAngleDegrees, weaponDirection);
 
     }
 

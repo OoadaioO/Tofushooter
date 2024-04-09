@@ -21,4 +21,8 @@ public class Settings {
 
 
     #endregion
+
+    // if the target distance is less than this then the aim angle will be uses(calculated from player),
+    // else the weapon aim angle will  be used(calculated from the weapon shoot position)
+    public const float useAimAngleDistance = 3.5f;
 }
