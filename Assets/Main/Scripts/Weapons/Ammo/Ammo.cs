@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour {
 
+    [SerializeField] private float knockbackThrust = 1f;
+
 
     // 子弹速度
     private float ammoSpeed;
@@ -15,8 +17,9 @@ public class Ammo : MonoBehaviour {
     private float fireDirectionAngle;
     // 子弹方向
     private Vector3 fireDirectionVector;
-    
+
     private AmmoDetailsSO ammoDetails;
+    
 
 
     private void Update() {
@@ -35,20 +38,27 @@ public class Ammo : MonoBehaviour {
         // 防止二次触发
         if (isColliding) return;
         DealDamage(other);
+
+        DisableAmmo();
     }
 
 
     private void DealDamage(Collider2D collision) {
 
-        // TODO 
-        // if (collision.TryGetComponent<Health>(out var health)) {
 
-        //     isColliding = true;
-        //     health.TakeDamage(ammoDetails.ammoDamage);
-        // }
+        if(collision.TryGetComponent<KnockBack>(out var knockBack)){
+
+            knockBack.Knockback(fireDirectionVector,knockbackThrust);
+        }
+
+        if (collision.TryGetComponent<Health>(out var health)) {
+            isColliding = true;
+
+            health.TakeDamage(ammoDetails.ammoDamage);
+
+        }
 
     }
-
 
 
     public void InitialiseAmmo(AmmoDetailsSO ammoDetails, float aimAngle, float weaponAimAngle, float ammoSpeed, Vector3 weaponAimDirectionVector) {

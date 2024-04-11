@@ -68,10 +68,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private void FireWeaponInput(Vector3 weaponDirection, float weaponAngleDegrees, float playerAngleDegrees, AimDirection playerAimDirection) {
-
-
         player.fireWeaponEvent.CallFireWeaponEvent(true, isFirePreviousFrame, playerAimDirection, playerAngleDegrees, weaponAngleDegrees, weaponDirection);
-
     }
 
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9201783217705953712}
   - component: {fileID: 6926424420476350250}
   m_Layer: 7
-  m_Name: gun
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,12 +169,12 @@ GameObject:
   - component: {fileID: 9100098883344214580}
   - component: {fileID: 6286769353569363492}
   - component: {fileID: 7368353102077430878}
-  - component: {fileID: 7486920644444559222}
-  - component: {fileID: 9100098883344214589}
+  - component: {fileID: 5249504691139292088}
   - component: {fileID: 785000134246727087}
   - component: {fileID: 5880281869650832251}
   - component: {fileID: 4703015140421701432}
-  - component: {fileID: 5249504691139292088}
+  - component: {fileID: 2283281620988191576}
+  - component: {fileID: 9100098883344214589}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -295,7 +295,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0040824823, y: 0.09287649}
+  m_Offset: {x: 0, y: 0.34}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.3}
@@ -306,7 +306,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.13569048, y: 0.16630907}
+  m_Size: {x: 0.53, y: 0.61}
   m_EdgeRadius: 0
 --- !u!95 &9100098883344214582
 Animator:
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponRotationPointTransform: {fileID: 9100098883742554509}
---- !u!114 &7486920644444559222
+--- !u!114 &5249504691139292088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -425,26 +425,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 9100098883344214563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dc04682445d74205a2111230664c103, type: 3}
+  m_Script: {fileID: 11500000, guid: 02aac5acc04e94a69ab8925c8a6b8fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9100098883344214589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9100098883344214563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69943d0fb7e8247deaa64b6ceb258a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireWeaponEvent: {fileID: 0}
-  aimWeaponEvent: {fileID: 0}
-  idleEvent: {fileID: 0}
-  movementByVelocityEvent: {fileID: 0}
-  animator: {fileID: 0}
+  ammoDetailsSO: {fileID: 11400000, guid: 9f7d3ae9e45ca4e7a95b823c81a682d2, type: 2}
+  weaponShootPositionTransform: {fileID: 9100098882856146412}
+  weaponEffectPositionTransform: {fileID: 9100098882856146412}
+  weaponFireRate: 0.5
+  weaponPrechargeTime: 0
 --- !u!114 &785000134246727087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89a9b74f261343089c9715c9bffff01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5249504691139292088
+--- !u!114 &2283281620988191576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,14 +478,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 9100098883344214563}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02aac5acc04e94a69ab8925c8a6b8fc7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3dc04682445d74205a2111230664c103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammoDetailsSO: {fileID: 11400000, guid: 9f7d3ae9e45ca4e7a95b823c81a682d2, type: 2}
-  weaponShootPositionTransform: {fileID: 9100098882856146412}
-  weaponEffectPositionTransform: {fileID: 9100098882856146412}
-  weaponFireRate: 0.5
-  weaponPrechargeTime: 0
+--- !u!114 &9100098883344214589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100098883344214563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69943d0fb7e8247deaa64b6ceb258a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireWeaponEvent: {fileID: 0}
+  aimWeaponEvent: {fileID: 0}
+  idleEvent: {fileID: 0}
+  movementByVelocityEvent: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1 &9100098883742554508
 GameObject:
   m_ObjectHideFlags: 0
