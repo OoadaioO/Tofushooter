@@ -1,12 +1,15 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 
 public class EnemySpawner : MonoBehaviour {
 
+    [HideInInspector] public Vector3 lastNeastEnemyPosition = new Vector3(float.MaxValue, 0, 0);
 
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private int enemyMaxConcurrentSpawnNumber;
+    [SerializeField] private List<AimDirection> enemySpawnDirectionArray;
 
     private int currentEnemyCount;
     private int enemiesSpawnedSoFar;
@@ -14,6 +17,7 @@ public class EnemySpawner : MonoBehaviour {
     private float spawnIntervalTimeMax = 0.2f;
     private float spawnIntervalTimer;
 
+    private GameObject nearestEnemy;
 
 
 
@@ -52,68 +56,112 @@ public class EnemySpawner : MonoBehaviour {
         Enemy enemy = enemyGameObject.GetComponent<Enemy>();
         enemy.EnemyInitialization(enemiesSpawnedSoFar);
         enemy.destroyedEvent.OnDestoryed += Enemy_OnDestoryed;
-
-
+        enemy.movementToPositionEvent.OnMovementToPosition += Enemy_MovementToPositionEvent;
 
     }
+
+
+
     private void Enemy_OnDestoryed(DestroyedEvent destroyedEvent, DestroyedEventArgs destoryedEventArgs) {
 
+
+        destroyedEvent.GetComponent<MovementToPositionEvent>().OnMovementToPosition -= Enemy_MovementToPositionEvent;
         destroyedEvent.OnDestoryed -= Enemy_OnDestoryed;
+
 
         currentEnemyCount--;
 
     }
 
+    private void Enemy_MovementToPositionEvent(MovementToPositionEvent movementToPositionEvent, MovementToPositionArgs args) {
+
+
+
+        Vector3 newEnemyPosition = movementToPositionEvent.transform.position;
+
+
+
+        if (nearestEnemy != null && nearestEnemy.activeSelf) {
+
+            Vector3 playerPosition = GameManager.Instance.GetPlayer().transform.position;
+            float lastNearestDistance = (lastNeastEnemyPosition - playerPosition).magnitude;
+            float newEnemyDistance = (newEnemyPosition - playerPosition).magnitude;
+
+            if (lastNearestDistance > newEnemyDistance) {
+                nearestEnemy = movementToPositionEvent.gameObject;
+            }
+
+        } else {
+            nearestEnemy = movementToPositionEvent.gameObject;
+        }
+
+        lastNeastEnemyPosition = nearestEnemy.transform.position;
+
+    }
+
     private Vector2 GetRandomSpawnPosition() {
 
-        Vector3 lowerPoint= Camera.main.ViewportToWorldPoint(new Vector3(0,0,0));
-        Vector3 upperPoint = Camera.main.ViewportToWorldPoint(new Vector3(1,1,0));
-
-        Debug.Log("lower point:"+lowerPoint +" upperPoint:"+upperPoint);
+        Vector3 lowerPoint = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        Vector3 upperPoint = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
 
 
-        Vector3 offset = upperPoint;
-        AimDirection direction = (AimDirection)UnityEngine.Random.Range(0, 8);
+
+        Vector3 spawnPosition = upperPoint;
+        Vector3 randomOffsset = Vector3.zero;
+        int index = Random.Range(0, enemySpawnDirectionArray.Count);
+        AimDirection direction = enemySpawnDirectionArray[index];
         switch (direction) {
             case AimDirection.Left:
-                offset.x = lowerPoint.x;
-                offset.y = 0;
+                spawnPosition.x = lowerPoint.x;
+                spawnPosition.y = 0;
+                randomOffsset = new Vector2(GetRandom01(1), GetRandom01(3));
                 break;
             case AimDirection.UpLeft:
-                offset.x = lowerPoint.x;
-                offset.y = upperPoint.y;
+                spawnPosition.x = lowerPoint.x;
+                spawnPosition.y = upperPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(3));
                 break;
             case AimDirection.DownLeft:
-                offset.x = lowerPoint.x;
-                offset.y = lowerPoint.y;
+                spawnPosition.x = lowerPoint.x;
+                spawnPosition.y = lowerPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(3));
                 break;
             case AimDirection.Up:
-                offset.x = 0;
-                offset.y = upperPoint.y;
+                spawnPosition.x = 0;
+                spawnPosition.y = upperPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(1));
                 break;
             case AimDirection.Down:
-                offset.x = 0;
-                offset.y = lowerPoint.y;
+                spawnPosition.x = 0;
+                spawnPosition.y = lowerPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(1));
                 break;
             case AimDirection.Right:
-                offset.x = upperPoint.x;
-                offset.y = 0;
+                spawnPosition.x = upperPoint.x;
+                spawnPosition.y = 0;
+                randomOffsset = new Vector2(GetRandom01(1), GetRandom01(3));
                 break;
             case AimDirection.UpRight:
-                offset.x = upperPoint.x;
-                offset.y = upperPoint.y;
+                spawnPosition.x = upperPoint.x;
+                spawnPosition.y = upperPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(3));
                 break;
             case AimDirection.DownRight:
-                offset.x = upperPoint.x;
-                offset.y = lowerPoint.y;
+                spawnPosition.x = upperPoint.x;
+                spawnPosition.y = lowerPoint.y;
+                randomOffsset = new Vector2(GetRandom01(3), GetRandom01(3));
                 break;
         }
 
 
-
-        Vector3 position = GameManager.Instance.GetPlayer().transform.position + offset + new Vector3(Random.Range(0, 3), Random.Range(0, 3), 0);
+        Vector3 position = spawnPosition + randomOffsset;
         return position;
 
+    }
+
+    private float GetRandom01(float range) {
+        int flag = Random.Range(0, 2) * 2 - 1;
+        return Random.Range(0f, range) * flag;
     }
 
 }

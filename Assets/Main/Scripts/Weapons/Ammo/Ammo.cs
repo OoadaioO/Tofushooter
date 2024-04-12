@@ -19,7 +19,7 @@ public class Ammo : MonoBehaviour {
     private Vector3 fireDirectionVector;
 
     private AmmoDetailsSO ammoDetails;
-    
+
 
 
     private void Update() {
@@ -46,16 +46,9 @@ public class Ammo : MonoBehaviour {
     private void DealDamage(Collider2D collision) {
 
 
-        if(collision.TryGetComponent<KnockBack>(out var knockBack)){
-
-            knockBack.Knockback(fireDirectionVector,knockbackThrust);
-        }
-
         if (collision.TryGetComponent<Health>(out var health)) {
             isColliding = true;
-
-            health.TakeDamage(ammoDetails.ammoDamage);
-
+            health.TakeDamage(collision.transform.position, knockbackThrust, ammoDetails.ammoDamage);
         }
 
     }

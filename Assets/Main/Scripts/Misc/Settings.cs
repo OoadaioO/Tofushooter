@@ -33,4 +33,9 @@ public class Settings {
 
     public const float playerMoveDistanceToRebuildPath = 1f;
     public const float enemyPathRebuildCooldown = 2f;
+
+    public const float contactDamageCollisionResetDelay = 2f; // 接触碰撞触发间隔
+
+    public const float minShootDistance = 4f;
+
 }

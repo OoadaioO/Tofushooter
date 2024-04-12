@@ -31,6 +31,8 @@ public class Enemy : MonoBehaviour {
 
 
     [SerializeField] private int enemyHealthAmount = 5;
+    [SerializeField] private float moveSpeedMin;
+    [SerializeField] private float moveSpeedMax;
 
 
 
@@ -87,6 +89,7 @@ public class Enemy : MonoBehaviour {
 
     private void SetEnemyMovmentUpdateFrame(int enemySpawnNumber) {
         enemyMovmentAI.SetUpdateFrameNumber(enemySpawnNumber % Settings.targetFrameRateToSpreadPathfindingOver);
+        enemyMovmentAI.moveSpeed = UnityEngine.Random.Range(moveSpeedMin,moveSpeedMax);
     }
 
     private void SetEnemyStartingHealth() {

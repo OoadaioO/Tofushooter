@@ -5,9 +5,11 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class EnemyMovmentAI : MonoBehaviour {
 
+    [HideInInspector] public float moveSpeed;
+
     [HideInInspector] public int updateFrameNumber = 1; // 默认值是1，通过enemy spawner 设置.
 
-    [SerializeField] private float moveSpeed;
+    
 
 
     private float currentEnemyPathRebuildCooldown;

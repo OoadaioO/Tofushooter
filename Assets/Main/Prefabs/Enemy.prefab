@@ -202,6 +202,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
   enemyHealthAmount: 3
+  moveSpeedMin: 0.9
+  moveSpeedMax: 1.2
   hitImmunityTime: 0.2
   isImmuneAfterHit: 1
 --- !u!114 &971048097200545458
@@ -252,8 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee38710f550cd40b5ac2b4349915136f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateFrameNumber: 1
   moveSpeed: 1
+  updateFrameNumber: 1
 --- !u!114 &5542995374454021775
 MonoBehaviour:
   m_ObjectHideFlags: 0

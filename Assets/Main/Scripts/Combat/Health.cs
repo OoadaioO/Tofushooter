@@ -53,9 +53,14 @@ public class Health : MonoBehaviour {
         healthEvent.CallHealthChangedEvent(currentHealth / (float)startingHealth, currentHealth, damageAmount);
     }
 
-    public void TakeDamage(int damageAmount) {
+    public void TakeDamage(Vector3 hintPoint, float knockbackThrust, int damageAmount) {
 
         if (isDamageable) {
+
+            if (TryGetComponent<KnockBack>(out var knockback)) {
+                knockback.Knockback((transform.position - hintPoint).normalized, knockbackThrust);
+            }
+
             currentHealth -= damageAmount;
             CallHealthEvent(damageAmount);
             PostHitImmunity();

@@ -21,6 +21,8 @@ public class FireWeapon : MonoBehaviour {
         weaponFiredEvent = GetComponent<WeaponFiredEvent>();
     }
 
+
+
     private void OnEnable() {
         fireWeaponEvent.OnFireWeapon += FireWeaponEvent_OnFireWeapon;
     }

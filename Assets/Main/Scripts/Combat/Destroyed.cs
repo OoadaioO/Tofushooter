@@ -21,6 +21,8 @@ public class Destroyed : MonoBehaviour {
         if (destoryedEventArgs.playerDied) {
             gameObject.SetActive(false);
         } else {
+            DeathFX deathFX = PoolManager.Instance.ReuseComponent<DeathFX>(GameResources.Instance.deathFXPrefab, transform.position, Quaternion.identity); ;
+            deathFX.gameObject.SetActive(true);
             Destroy(gameObject);
         }
 

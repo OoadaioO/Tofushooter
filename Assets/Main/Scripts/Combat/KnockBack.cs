@@ -6,7 +6,7 @@ using UnityEngine;
 public class KnockBack : MonoBehaviour {
     [HideInInspector] public bool isKnockBack;
 
-    [SerializeField] private float knockbackTimeDuration = 1f;
+    [SerializeField] private float knockbackTimeDuration = .1f;
 
     private Rigidbody2D rigidBody2D;
 
@@ -22,14 +22,14 @@ public class KnockBack : MonoBehaviour {
     private void ApplyKnock(Vector3 forceDirection, float knockbackThrust) {
         isKnockBack = true;
 
-        Vector2 difference = rigidBody2D.mass * knockbackThrust *forceDirection.normalized;
-        rigidBody2D.AddForce(difference, ForceMode2D.Impulse);
-
-        StartCoroutine(KnockRoutine());
+        StartCoroutine(KnockRoutine(forceDirection, knockbackThrust));
 
     }
 
-    private IEnumerator KnockRoutine() {
+    private IEnumerator KnockRoutine(Vector3 forceDirection, float knockbackThrust) {
+
+        Vector2 difference = rigidBody2D.mass * knockbackThrust * forceDirection.normalized;
+        rigidBody2D.AddForce(difference, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(knockbackTimeDuration);
         isKnockBack = false;
